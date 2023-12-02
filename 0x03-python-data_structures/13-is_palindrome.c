@@ -1,73 +1,99 @@
-#include "lists.h"
-#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-listint_t *reverse_listint(listint_t **head);
-int is_palindrome(listint_t **head);
+/* Definition for singly-linked list node */
+typedef struct listint_t {
+    int data;
+    struct listint_t* next;
+} listint_t;
 
-/**
- * reverse_listint - Reverses a singly-linked listint_t list.
- * @head: A pointer to the starting node of the list to reverse.
- *
- * Return: A pointer to the head of the reversed list.
- */
-listint_t *reverse_listint(listint_t **head)
-{
-	listint_t *node = *head, *next, *prev = NULL;
+/* Function to check if a linked list is a palindrome */
+int is_palindrome(listint_t **head) {
+    if (*head == NULL || (*head)->next == NULL) {
+        return 1;  // An empty list or a single-node list is a palindrome
+    }
 
-	while (node)
-	{
-		next = node->next;
-		node->next = prev;
-		prev = node;
-		node = next;
-	}
+    listint_t *slow = *head, *fast = *head;
+    
+    // Move 'fast' to the end and 'slow' to the middle of the list
+    while (fast != NULL && fast->next != NULL) {
+        fast = fast->next->next;
+        slow = slow->next;
+    }
 
-	*head = prev;
-	return (*head);
+    // Reverse the second half of the list
+    listint_t *prev = NULL, *curr = slow, *next = NULL;
+    while (curr != NULL) {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+
+    // Compare the first and reversed second halves
+    listint_t *first = *head, *second = prev;
+    while (second != NULL) {
+        if (first->data != second->data) {
+            return 0;  // Not a palindrome
+        }
+        first = first->next;
+        second = second->next;
+    }
+
+    return 1;  // Palindrome
 }
 
-/**
- * is_palindrome - Checks if a singly linked list is a palindrome.
- * @head: A pointer to the head of the linked list.
- *
- * Return: If the linked list is not a palindrome - 0.
- *         If the linked list is a palindrome - 1.
- */
-int is_palindrome(listint_t **head)
-{
-	listint_t *tmp, *rev, *mid;
-	size_t size = 0, i;
-
-	if (*head == NULL || (*head)->next == NULL)
-		return (1);
-
-	tmp = *head;
-	while (tmp)
-	{
-		size++;
-		tmp = tmp->next;
-	}
-
-	tmp = *head;
-	for (i = 0; i < (size / 2) - 1; i++)
-		tmp = tmp->next;
-
-	if ((size % 2) == 0 && tmp->n != tmp->next->n)
-		return (0);
-
-	tmp = tmp->next->next;
-	rev = reverse_listint(&tmp);
-	mid = rev;
-
-	tmp = *head;
-	while (rev)
-	{
-		if (tmp->n != rev->n)
-			return (0);
-		tmp = tmp->next;
-		rev = rev->next;
-	}
-	reverse_listint(&mid);
-
-	return (1);
+/* Function to create a new node with given data */
+listint_t *createNode(int data) {
+    listint_t *newNode = (listint_t *)malloc(sizeof(listint_t));
+    if (newNode == NULL) {
+        fprintf(stderr, "Memory allocation error\n");
+        exit(EXIT_FAILURE);
+    }
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
 }
+
+/* Function to print the linked list */
+void printList(listint_t *head) {
+    while (head != NULL) {
+        printf("%d -> ", head->data);
+        head = head->next;
+    }
+    printf("NULL\n");
+}
+
+/* Function to free the memory allocated for the linked list */
+void freeList(listint_t *head) {
+    listint_t *temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+}
+
+/* Example usage */
+int main() {
+    listint_t *head = createNode(1);
+    head->next = createNode(2);
+    head->next->next = createNode(3);
+    head->next->next->next = createNode(2);
+    head->next->next->next->next = createNode(1);
+
+    printf("Original list: ");
+    printList(head);
+
+    if (is_palindrome(&head)) {
+        printf("The list is a palindrome.\n");
+    } else {
+        printf("The list is not a palindrome.\n");
+    }
+
+    // Free the allocated memory
+    freeList(head);
+
+    return 0;
+}
+
