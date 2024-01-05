@@ -1,106 +1,67 @@
 #!/usr/bin/python3
-"""2-rectangle, built for Holberton Python project 0x08 task 2.
+"""
+Module 2-rectangle
+Contains class Rectangle with private attribute width and height,
+and public area and perimeter methods
 """
 
 
 class Rectangle:
-    """Takes in args for width and height of a rectangle, and contains methods
-    for calculation of the area or perimeter.
+    """
+    Defines class rectangle with private attribute width and height
 
     Args:
-        width (int): horizontal dimension of rectangle, defaults to 0
-        height (int): vertical dimension of rectangle, defaults to 0
+        width (int): width
+        height (int): height
 
+    Functions:
+        __init__(self, width, height)
+        width(self)
+        width(self, value)
+        height(self)
+        height(self, value)
+        area(self)
+        perimeter(self)
     """
     def __init__(self, width=0, height=0):
-        # attribute assigment here engages setters defined below
+        """ Initialize rectangles """
         self.width = width
         self.height = height
 
     @property
     def width(self):
-        """__width getter.
-
-        Returns:
-            __width (int): horizontal dimension of rectangle
-
-        """
+        """ Getter returns width """
         return self.__width
 
     @width.setter
     def width(self, value):
-        """Args:
-            value (int): horizontal dimension of rectangle
-
-        Attributes:
-           __width (int): horizontal dimension of rectangle
-
-        Raises:
-            TypeError: If `value` is not an int.
-            ValueError: If `value` is less than 0.
-
-        """
-        if type(value) is not int:
-            raise TypeError('width must be an integer')
-        elif value < 0:
-            raise ValueError('width must be >= 0')
+        """ Setter sets width if int > 0 """
+        if not isinstance(value, int):
+            raise TypeError("width must be an integer")
+        if value < 0:
+            raise ValueError("width must be >= 0")
         self.__width = value
 
     @property
     def height(self):
-        """__height getter.
-
-        Returns:
-            __height (int): vertical dimension of rectangle
-
-        """
+        """ Getter returns height """
         return self.__height
 
     @height.setter
     def height(self, value):
-        """Args:
-            value (int): vertical dimension of rectangle
-
-        Attributes:
-            __height (int): vertical dimension of rectangle
-
-        Raises:
-            TypeError: If `value` is not an int.
-            ValueError: If `value` is less than 0.
-
-        """
-        if type(value) is not int:
-            raise TypeError('height must be an integer')
+        """ Setter sets height if int > 0 """
+        if not isinstance(value, int):
+            raise TypeError("height must be an integer")
         if value < 0:
-            raise ValueError('height must be >= 0')
+            raise ValueError("height must be >= 0")
         self.__height = value
 
     def area(self):
-        """Returns area of a rectangle of a given `width` and `height`.
+        """ Return width * height """
+        return self.__width * self.__height
 
-       Attributes:
-             __width (int): horizontal dimension of rectangle
-             __height (int): vertical dimension of rectangle
-       
-       Returns:
-           Area of rectangle: __width * __height
-       
-       """
-       return self.__width * self.__height
-
-   def perimeter(self):
-       """Returns the perimeter of a rectangle of given `width` and `height`
-
-       Attributes:
-             __width (int): horizontal dimension of rectangle
-             __height (int): vertical dimension of rectangle
-       
-       Returns:
-           0 if either attribute is 0, or the perimeter: (__width * 2) +
-           (__height * 2).
-       
-       """
-       if self.__width is 0 or self.__height is 0:
-           return 0
-       else:
-           return (self.__width)
+    def perimeter(self):
+        """ Return 2*width + 2*height (or return 0 if width or height is 0)"""
+        if self.__width == 0 or self.__height == 0:
+            return 0
+        return (2 * self.__width) + (2 * self.height)
